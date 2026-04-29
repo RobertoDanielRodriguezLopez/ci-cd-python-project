@@ -1,0 +1,3 @@
+Application: ci-cd-python-project
+Environment: dev
+Owner: platform-team
