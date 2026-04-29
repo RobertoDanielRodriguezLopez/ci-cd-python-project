@@ -4,8 +4,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     volumes:
-      - ../app:/app/app
-      - ../tests:/app/tests
+      - ..:/app
 
   sonarqube:
     image: sonarqube:10-community
