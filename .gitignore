@@ -1,7 +1,29 @@
+# Python
 __pycache__/
 *.pyc
-.env
+
+# Virtual environments
 .venv
+
+# Environment variables
+.env
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# IDEs
 .idea/
 .vscode/
+
+# Terraform
 terraform/.terraform/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
