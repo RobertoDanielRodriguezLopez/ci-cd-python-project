@@ -1,24 +1,46 @@
-name: Continuous Integration
-
+name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
 
 jobs:
   tests:
-    name: Run tests (unit + API)
+    name: Unit and API Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Build Docker image
         run: |
-          docker build -t ci-python-app .
+          docker build -t ci-python-app -f docker/Dockerfile .
 
-      - name: Run pytest inside container
+      - name: Run pytest (unit + API tests)
         run: |
           docker run --rm ci-python-app pytest
+
+  security:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Bandit (SAST)
+        run: |
+          docker run --rm \
+            -v "$PWD:/src" \
+            python:3.11-slim \
+            sh -c "pip install bandit && bandit -r /src/app"
+
+      - name: Run Dependency Scan (pip-audit)
+        run: |
+          docker run --rm \
+            -v "$PWD:/src" \
+            python:3.11-slim \
+            sh -c "pip install pip-audit && pip-audit -r /src/requirements.txt || true"
