@@ -1,10 +1,11 @@
-def build_word(words: list[str]) -> str:
-    """
-    Build a new word by taking the n-th character of the n-th word.
-    """
-    result = []
+from typing import List
+
+
+def build_word(words: List[str]) -> str:
+    result = ""
 
     for index, word in enumerate(words):
-        result.append(word[index])
+        if len(word) > index:
+            result += word[index]
 
-    return "".join(result)
+    return result
