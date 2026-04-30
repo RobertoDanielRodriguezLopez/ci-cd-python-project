@@ -7,9 +7,27 @@ router = APIRouter(prefix="/dictionary", tags=["dictionary"])
 dictionary = Dictionary()
 
 
+# ---------
+# Request
+# ---------
 class DictionaryRequest(BaseModel):
     word: str
     definition: str
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "word": "apple",
+                "definition": "a fruit"
+            }
+        }
+
+
+# ----------
+# Response
+# ----------
+class DictionaryResponse(BaseModel):
+    result: str
 
 
 @router.post("")
@@ -18,7 +36,7 @@ def add_entry(payload: DictionaryRequest):
     return {"word": payload.word, "definition": payload.definition}
 
 
-@router.get("/{word}")
+@router.get("/{word}", response_model=DictionaryResponse)
 def get_entry(word: str):
     result = dictionary.Look(word)
     return {"result": result}
