@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from app.dictionary.dictionary import Dictionary
 
@@ -39,4 +39,11 @@ def add_entry(payload: DictionaryRequest):
 @router.get("/{word}", response_model=DictionaryResponse)
 def get_entry(word: str):
     result = dictionary.Look(word)
+
+    if result.startswith("Can't find entry"):
+        raise HTTPException(
+            status_code=404,
+            detail=result
+        )
+
     return {"result": result}
