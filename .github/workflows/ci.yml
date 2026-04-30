@@ -17,4 +17,5 @@ jobs:
         run: docker build -t ci-python-app -f docker/Dockerfile .
 
       - name: Run tests
-        run: docker run ci-python-app
+        run: |
+          docker run --rm ci-python-app pytest
