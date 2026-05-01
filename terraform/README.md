@@ -54,10 +54,17 @@ Key design decisions include:
 
 ## Usage
 
-The Terraform files are not intended to be applied against real
-infrastructure.
 
-Running `terraform apply` is **not required** and **not recommended**
-for this project.
+## Usage
 
-The configuration exists for review and understanding purposes only.
+Terraform in this project is fully functional and applies real changes,
+but its scope is intentionally limited to local resources using the
+`local` provider.
+
+The apply operation creates and replaces local files to demonstrate
+Infrastructure as Code behavior, state management, and environment
+promotion.
+
+No cloud infrastructure is provisioned, and no external services are
+used. This approach allows demonstrating real Terraform workflows
+without introducing cost or operational risk.

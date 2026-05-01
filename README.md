@@ -20,7 +20,7 @@ and work management.
 - Generate and enforce code coverage via Quality Gates
 - Enforce code quality using SonarQube
 - Integrate security checks into the pipeline
-- Demonstrate Infrastructure as Code using Terraform (conceptual, simulated)
+- Demonstrate Infrastructure as Code using Terraform (local and controlled)
 - Simulate a real team workflow using GitHub Projects
 
 ---

@@ -1,0 +1,9 @@
+# Terraform state
+terraform.tfstate
+terraform.tfstate.backup
+
+# Terraform local working files
+.terraform/
+
+# Generated local files
+modules/app_environment/*.txt
