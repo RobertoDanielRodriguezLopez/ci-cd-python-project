@@ -36,7 +36,22 @@ def add_entry(payload: DictionaryRequest):
     return {"word": payload.word, "definition": payload.definition}
 
 
-@router.get("/{word}", response_model=DictionaryResponse)
+@router.get(
+    "/{word}",
+    response_model=DictionaryResponse,
+    responses={
+        404: {
+            "description": "Entry not found",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": "Can't find entry for banana"
+                    }
+                }
+            },
+        }
+    },
+)
 def get_entry(word: str):
     result = dictionary.look(word)
 
