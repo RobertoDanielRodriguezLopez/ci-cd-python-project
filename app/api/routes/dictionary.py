@@ -38,7 +38,7 @@ def add_entry(payload: DictionaryRequest):
 
 @router.get("/{word}", response_model=DictionaryResponse)
 def get_entry(word: str):
-    result = dictionary.Look(word)
+    result = dictionary.look(word)
 
     if result.startswith("Can't find entry"):
         raise HTTPException(

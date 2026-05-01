@@ -8,7 +8,7 @@ class Dictionary:
     def newentry(self, word: str, definition: str) -> None:
         self.dictionary[word] = definition
 
-    def Look(self, word: str) -> str:
+    def look(self, word: str) -> str:
         if word in self.dictionary:
             return self.dictionary[word]
         return f"Can't find entry for {word}"
