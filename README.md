@@ -21,6 +21,7 @@ and work management.
 - Enforce code quality using SonarQube
 - Integrate security checks into the pipeline
 - Demonstrate Infrastructure as Code using Terraform (local and controlled)
+- A simple feature-branch workflow for team-based development in real environments.
 - Simulate a real team workflow using GitHub Projects
 
 ---
