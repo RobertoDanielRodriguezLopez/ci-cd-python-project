@@ -16,3 +16,7 @@ def test_dictionary_add_and_get():
     get_response = client.get("/dictionary/apple")
     assert get_response.status_code == 200
     assert get_response.json() == {"result": "a fruit"}
+    
+def test_dictionary_not_found_returns_404():
+    response = client.get("/dictionary/unknownword")
+    assert response.status_code == 404
