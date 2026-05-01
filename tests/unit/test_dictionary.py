@@ -23,3 +23,12 @@ def test_dictionary_overwrites_existing_entry():
 
     result = d.look("Apple")
     assert result == "A tech company"
+
+
+def test_dictionary_is_case_insensitive():
+    d = Dictionary()
+    d.newentry("Apple", "a fruit")
+
+    assert d.look("apple") == "a fruit"
+    assert d.look("APPLE") == "a fruit"
+    assert d.look("ApPlE") == "a fruit"
