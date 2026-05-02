@@ -32,7 +32,7 @@ class DictionaryResponse(BaseModel):
 
 @router.post("")
 def add_entry(payload: DictionaryRequest):
-    dictionary.newentry(payload.word, payload.definition)
+    dictionary.add_entry(payload.word, payload.definition)
     return {"word": payload.word, "definition": payload.definition}
 
 
@@ -53,12 +53,12 @@ def add_entry(payload: DictionaryRequest):
     },
 )
 def get_entry(word: str):
-    result = dictionary.look(word)
+    result = dictionary.lookup(word)
 
-    if result.startswith("Can't find entry"):
+    if result is None:
         raise HTTPException(
             status_code=404,
-            detail=result
+            detail=f"Can't find entry for {word}"
         )
 
     return {"result": result}
