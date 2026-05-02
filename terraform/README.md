@@ -54,9 +54,6 @@ Key design decisions include:
 
 ## Usage
 
-
-## Usage
-
 Terraform in this project is fully functional and applies real changes,
 but its scope is intentionally limited to local resources using the
 `local` provider.
