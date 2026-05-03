@@ -48,15 +48,7 @@ All functionality is covered by automated tests.
 
 ## Project Structure
 
-ci-cd-python-project/
-├── app/                    # Application source code and API
-├── tests/                  # Unit and API tests
-├── docker/                 # Docker and Docker Compose configuration
-├── .github/workflows/      # CI/CD pipelines
-├── terraform/              # Infrastructure as Code (conceptual)
-├── docs/                   # Technical documentation
-├── README.md
-└── requirements.txt
+![CI/CD Pipeline](docs/images/CI-CD-pipeline.png)
 
 ---
 
@@ -105,6 +97,10 @@ Infrastructure
 
 
 Detailed pipeline documentation is available in the /docs directory.
+
+---
+
+![CI/CD Pipeline](docs/images/Project-Structure.png)
 
 ---
 
