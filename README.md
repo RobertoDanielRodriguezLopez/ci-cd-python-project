@@ -48,7 +48,7 @@ All functionality is covered by automated tests.
 
 ## Project Structure
 
-![CI/CD Pipeline](docs/images/CI-CD-pipeline.png)
+![CI/CD Pipeline](docs/images/Project-Structure.png)
 
 ---
 
@@ -100,7 +100,7 @@ Detailed pipeline documentation is available in the /docs directory.
 
 ---
 
-![CI/CD Pipeline](docs/images/Project-Structure.png)
+![CI/CD Pipeline](docs/images/CI-CD-pipeline.png)
 
 ---
 
