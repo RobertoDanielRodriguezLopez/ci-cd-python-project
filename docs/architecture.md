@@ -13,22 +13,7 @@ API layer, testing, infrastructure, and CI/CD configuration.
 
 ## Project Structure
 
-ci-cd-python-project/
-├── app/                    # Application source code
-│   ├── api/                # FastAPI routes and request/response models
-│   ├── dictionary/         # Dictionary domain logic
-│   ├── shopping/           # Cost calculator logic
-│   └── words/              # Word builder logic
-│
-├── tests/                  # Test suite
-│   ├── unit/               # Unit tests for core logic
-│   └── api/                # API tests using FastAPI TestClient
-│
-├── docker/                 # Docker and Docker Compose configuration
-├── terraform/              # Infrastructure as Code (local simulation)
-├── docs/                   # Technical documentation
-├── .github/workflows/      # CI pipelines (GitHub Actions)
-└── README.md               # Project overview
+![CI/CD Pipeline](images/Project-Structure.png)
 
 ---
 
