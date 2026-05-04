@@ -1,14 +1,16 @@
-variable "environment" {
-  description = "Deployment environment (dev, qa, prod)"
+variable "aws_region" {
+  description = "AWS region"
   type        = string
+  default     = "us-east-1"
 }
 
-variable "app_name" {
-  description = "Application name"
+variable "instance_type" {
+  description = "EC2 instance type (Free Tier)"
   type        = string
+  default     = "t2.micro"
 }
 
-variable "owner" {
-  description = "Team or owner of the application"
+variable "key_name" {
+  description = "SSH key pair name"
   type        = string
 }
