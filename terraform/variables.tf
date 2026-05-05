@@ -11,6 +11,7 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  description = "SSH key pair name"
+  description = "SSH key pair name for the EC2 instance"
   type        = string
+  default     = "ci-cd-keypair"
 }
