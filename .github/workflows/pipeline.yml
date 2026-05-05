@@ -95,6 +95,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform -chdir=terraform init -input=false
+    
+      - name: Terraform Apply
+        run: terraform -chdir=terraform apply -auto-approve
 
       - name: Get EC2 public IP from Terraform
         run: |
