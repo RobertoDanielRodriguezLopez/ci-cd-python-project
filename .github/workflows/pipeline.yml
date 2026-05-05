@@ -82,10 +82,25 @@ jobs:
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
-    needs: sonar
+    needs: [tests, security, sonar]
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform -chdir=terraform init -input=false
+        
+      - name: Get EC2 public IP from Terraform
+        run: |
+          ip=$(terraform -chdir=terraform output -raw ec2_public_ip)
+          echo "EC2_HOST=$ip" >> $GITHUB_ENV
+          echo "Resolved EC2_HOST=$ip"
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
