@@ -52,7 +52,7 @@ jobs:
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
-    needs: sonar
+    needs: security
     if: github.ref == 'refs/heads/main'
 
     steps:
