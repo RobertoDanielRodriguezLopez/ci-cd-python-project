@@ -91,7 +91,7 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init
+      - name: Terraform Init (remote backend)
         run: terraform -chdir=terraform init -input=false
 
       - name: Terraform Apply
