@@ -103,6 +103,7 @@ jobs:
         run: terraform -chdir=terraform apply -auto-approve
 
       - name: Get EC2 public IP from Terraform
+
         run: |
           ip=$(terraform -chdir=terraform output -raw ec2_public_ip)
           if [ -z "$ip" ]; then
@@ -111,6 +112,11 @@ jobs:
           fi
           echo "EC2_HOST=$ip" >> $GITHUB_ENV
           echo "Resolved EC2_HOST=$ip"
+
+      - name: Wait for EC2 to be ready
+        run: |
+          echo "Waiting 45 seconds for EC2 SSH service..."
+          sleep 45
 
       - name: Set up SSH
         run: |
