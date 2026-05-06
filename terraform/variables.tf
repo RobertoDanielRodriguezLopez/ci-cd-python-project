@@ -15,3 +15,9 @@ variable "key_name" {
   type        = string
   default     = "ci-cd-python-key"
 }
+
+variable "vpc_id" {
+  description = "VPC where the EC2 instance is deployed"
+  type        = string
+  default     = "vpc-049d9fb4a547bbca2"
+}
