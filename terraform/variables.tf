@@ -21,3 +21,8 @@ variable "vpc_id" {
   type        = string
   default     = "vpc-049d9fb4a547bbca2"
 }
+
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+}

@@ -1,3 +1,2 @@
 environment = "prod"
-app_name    = "ci-cd-python-project"
-owner       = "ops-team"
+instance_type = "t2.micro"

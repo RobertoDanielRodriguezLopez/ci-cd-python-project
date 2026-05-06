@@ -18,6 +18,7 @@ resource "aws_instance" "ci_cd_instance" {
   user_data = file("${path.module}/user_data.sh")
 
   tags = {
-    Name = "ci-cd-python-ec2"
+    Name        = "ci-cd-python-${var.environment}-ec2"
+    Environment = var.environment
   }
 }
