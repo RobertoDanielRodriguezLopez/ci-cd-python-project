@@ -91,11 +91,11 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init (remote backend)
+      - name: Terraform Init (prod)
         run: terraform -chdir=terraform init -input=false
 
-      - name: Terraform Apply
-        run: terraform -chdir=terraform apply -auto-approve
+      - name: Terraform Apply (prod)
+        run: terraform -chdir=terraform apply -auto-approve -var-file=environments/prod.tfvars
 
       - name: Get EC2 public IP from Terraform
         run: |
