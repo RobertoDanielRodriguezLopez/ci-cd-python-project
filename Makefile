@@ -71,7 +71,9 @@ security: security-bandit security-deps
 # Coverage (Optional)
 # =========================
 coverage:
-	$(DOCKER_COMPOSE) run --rm $(APP_SERVICE) pytest --cov=app
+	$(DOCKER_COMPOSE) run --rm \
+        -e COVERAGE_FILE=/tmp/.coverage \
+        $(APP_SERVICE) pytest --cov=app --cov-report=term
 
 # =========================
 # Terraform (Safe Operations Only)
