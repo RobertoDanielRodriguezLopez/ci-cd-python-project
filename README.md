@@ -113,6 +113,19 @@ Detailed pipeline documentation is available in the /docs directory.
 
 ---
 
+## Code Coverage
+
+Code coverage is generated during the CI pipeline using `pytest-cov` and
+published to SonarCloud for analysis.
+
+Coverage artifacts such as `coverage.xml` or `.coverage` are not committed
+to the repository.
+
+Local coverage execution (`make coverage`) is optional and intended only
+for quick developer feedback via console output.
+
+---
+
 ## Security
 
 Security checks are integrated directly into the CI pipeline:
