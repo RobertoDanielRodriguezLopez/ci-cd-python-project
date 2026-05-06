@@ -1,24 +1,51 @@
 # =========================
-# Variables
+# Configuration
 # =========================
-APP_SERVICE=app
-DOCKER_COMPOSE=docker compose -f docker/docker-compose.yml
-TERRAFORM_DIR=terraform
+APP_SERVICE := app
+DOCKER_COMPOSE := docker compose -f docker/docker-compose.yml
+TERRAFORM_DIR := terraform
+
+.DEFAULT_GOAL := help
 
 # =========================
-# Docker
+# Help
+# =========================
+help:
+	@echo ""
+	@echo "Available commands:"
+	@echo ""
+	@echo " Development:"
+	@echo "   dev           Build and run the app locally (detached)"
+	@echo "   dev-safe      Run CI checks locally, then start the app"
+	@echo ""
+	@echo " Testing:"
+	@echo "   test          Run unit and API tests"
+	@echo "   coverage      Run test coverage report"
+	@echo ""
+	@echo " Security:"
+	@echo "   security      Run security scans (bandit, pip-audit)"
+	@echo ""
+	@echo " Infrastructure (safe):"
+	@echo "   infra-check   Terraform init + validate (NO apply)"
+	@echo ""
+	@echo " Cleanup:"
+	@echo "   clean         Stop local containers"
+	@echo ""
+
+# =========================
+# Docker (Local Dev Only)
 # =========================
 docker-build:
 	$(DOCKER_COMPOSE) build
 
 docker-up:
-	$(DOCKER_COMPOSE) up
+	$(DOCKER_COMPOSE) up -d
 
 docker-down:
 	$(DOCKER_COMPOSE) down
 
 # =========================
-# Tests
+# Tests (Local CI Mirror)
 # =========================
 test-unit:
 	$(DOCKER_COMPOSE) run --rm $(APP_SERVICE) pytest tests/unit
@@ -35,21 +62,19 @@ security-bandit:
 	$(DOCKER_COMPOSE) run --rm $(APP_SERVICE) bandit -r app
 
 security-deps:
-	@echo Running dependency audit (informational)
+	@echo "Running dependency audit (informational)"
 	-$(DOCKER_COMPOSE) run --rm $(APP_SERVICE) pip-audit
-
-
 
 security: security-bandit security-deps
 
 # =========================
-# Coverage (optional)
+# Coverage (Optional)
 # =========================
 coverage:
 	$(DOCKER_COMPOSE) run --rm $(APP_SERVICE) pytest --cov=app
 
 # =========================
-# Terraform
+# Terraform (Safe Operations Only)
 # =========================
 terraform-init:
 	terraform -chdir=$(TERRAFORM_DIR) init
@@ -57,16 +82,18 @@ terraform-init:
 terraform-validate:
 	terraform -chdir=$(TERRAFORM_DIR) validate
 
-infra: terraform-init terraform-validate
+infra-check: terraform-init terraform-validate
+	@echo "Terraform validation complete ✅"
+	@echo "NOTE: apply/destroy are intentionally NOT part of the Makefile"
 
 # =========================
-# CI LOCAL
+# Local CI (Mirror of GitHub Actions CI)
 # =========================
-ci: docker-build test security infra
-	@echo "CI local passed successfully ✅ "
+ci: docker-build test security infra-check
+	@echo "Local CI checks passed ✅"
 
 # =========================
-# Development
+# Development Flows
 # =========================
 dev: docker-build docker-up
 
@@ -76,5 +103,3 @@ dev-safe: ci docker-up
 # Cleanup
 # =========================
 clean: docker-down
-
-.DEFAULT_GOAL := ci
