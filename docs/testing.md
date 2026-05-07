@@ -2,45 +2,52 @@
 
 ## Overview
 
-This project implements a multi-level testing strategy aimed at validating
-both business logic and API behavior in a reliable and reproducible way.
+This project implements a multi‑level automated testing strategy designed
+to validate both business logic and API behavior in a reliable and
+repeatable way.
+
+Testing exists to support quality enforcement, not as an isolated activity.
+All tests are integrated into the Continuous Integration (CI) pipeline and
+are mandatory for merging changes into `main`.
 
 ---
 
 ## Testing Levels
 
-The test suite is divided into two main categories:
+The test suite is divided into two primary levels:
 
 - **Unit tests**
 - **API tests**
 
-Each category serves a distinct purpose and is executed automatically
-as part of the CI pipeline.
+Each level serves a distinct purpose and contributes to overall confidence
+in the system.
 
 ---
 
 ## Unit Tests
 
-Unit tests validate the core business logic in isolation, without involving
-the API layer or HTTP.
+Unit tests validate core business logic in complete isolation from the API
+layer and HTTP concerns.
 
 ### Characteristics
 
 - Execute individual functions and classes
-- Do not require FastAPI or HTTP
+- No dependency on FastAPI or HTTP
 - Fast execution
-- Deterministic behavior
+- Deterministic and repeatable behavior
 
-### Examples
+### Coverage
 
 Unit tests cover logic such as:
 
 - Dictionary operations
-- Cost calculation
-- Word building logic
+- Cost calculation logic
+- Word building functionality
 
-By keeping this logic independent from the API layer, tests remain simple,
-focused, and easy to maintain.
+By keeping core logic independent from the API layer, unit tests remain:
+- Simple
+- Focused
+- Easy to extend and maintain
 
 ---
 
@@ -48,61 +55,53 @@ focused, and easy to maintain.
 
 API tests validate the HTTP interface exposed by the application.
 
-They ensure that:
+These tests ensure:
 
 - Endpoints respond correctly
 - Request/response contracts are respected
-- HTTP status codes are appropriate
+- HTTP status codes are accurate
+- Application behavior matches external expectations
 
-These tests are implemented using FastAPI’s `TestClient`.
-
-### Characteristics
-
-- Validate full request/response flow
-- Focus on externally observable behavior
-- Do not test implementation details
+API tests are implemented using FastAPI’s `TestClient`, avoiding
+external services or network dependencies.
 
 ---
 
-## Error Handling Coverage
+## Error Handling and Edge Cases
 
-The test suite prioritizes coverage of meaningful execution paths.
+The test suite prioritizes coverage of meaningful execution paths, including:
 
-These paths are validated manually during development and through API usage.
+- Valid inputs
+- Edge cases
+- Error scenarios exposed via the API
 
----
-
-## Coverage Philosophy
-
-Code coverage is treated as a supporting metric, not a goal.
-
-Key principles:
-
-- Coverage thresholds are enforced via Quality Gates
-- Meaningful logic paths are tested
-
-The project achieves high coverage while maintaining a clean and readable test suite.
-
----
-
-## Docker-Based Test Execution
-
-All tests are executed inside Docker containers.
-
-Benefits:
-
-- Consistent execution environment
-- Reproducible results across machines
-- Identical behavior locally and in CI
-
-This ensures that test results are not affected by local environment differences.
+The goal is not exhaustive permutation testing, but confidence in
+real‑world usage patterns.
 
 ---
 
 ## CI Integration
 
-Tests are automatically executed in the CI pipeline on every push
-and pull request.
+All tests are executed automatically as part of Continuous Integration (CI).
 
-Test failures immediately stop the pipeline, preventing unvalidated
-changes from progressing.
+CI behavior:
+
+- Tests run on every Pull Request
+- Tests run on every push to `main`
+- Test failures immediately stop the pipeline
+- Failed tests block merges automatically
+
+This guarantees that no untested changes reach the main branch.
+
+---
+
+## Runtime Separation
+
+Testing and production runtime are intentionally separated:
+
+- Tests run during CI execution
+- Production runtime uses Docker on EC2
+- CI does not execute the application as a running service
+
+This separation ensures that testing remains fast and deterministic while
+production focuses on stable runtime execution.

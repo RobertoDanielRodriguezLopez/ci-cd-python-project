@@ -1,6 +1,17 @@
 .git
-__pycache__
+.gitignore
+
+__pycache__/
 *.pyc
+
 .env
-.idea
-.vscode
+
+.idea/
+.vscode/
+
+# Tests and docs not needed in runtime image
+tests/
+docs/
+htmlcov/
+.pytest_cache/
+coverage.xml

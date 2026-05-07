@@ -1,102 +1,111 @@
-
-# CI/CD Python Project – Docker‑First DevSecOps Pipeline
+# CI/CD Python Project
 
 ## Project Overview
 
-This project demonstrates a complete CI/CD pipeline for a Python application
-using a Docker‑first and DevSecOps approach.
+This project demonstrates a production‑ready CI/CD pipeline for a Python
+application, implemented using Docker, GitHub Actions, Terraform, and
+SonarCloud, following modern DevSecOps and infrastructure governance
+principles.
 
-The primary focus of the project is not application complexity, but the design
-and implementation of a professional software delivery pipeline that integrates
-testing, quality analysis, security checks, Infrastructure as Code concepts,
-and work management.
+The goal of the project is not application complexity, but to showcase a
+real‑world software delivery architecture, including:
 
----
+- CI with quality and security enforcement
+- Protected CD with approvals
+- Infrastructure as Code
+- Container‑based runtime in production
+- Release management and governance practices
 
-## Project Goals
-
-- Build a Docker‑first CI/CD pipeline
-- Execute unit and API tests automatically
-- Generate and enforce code coverage via Quality Gates
-- Enforce code quality using SonarQube
-- Integrate security checks into the pipeline
-- Demonstrate Infrastructure as Code using Terraform (local and controlled)
-- A simple feature-branch workflow for team-based development in real environments.
-- Simulate a real team workflow using GitHub Projects
-
----
-
-## Application Functionality
-
-The application contains intentionally simple, deterministic logic to serve
-as a stable base for CI/CD and quality practices.
-
-It includes three Python components:
-
-1. **Dictionary**  
-   Stores and retrieves word definitions.
-
-2. **Cost Calculator**  
-   Calculates the total cost of items including tax and ignores missing items.
-
-3. **Word Builder**  
-   Builds a word by taking indexed characters from a list of words.
-
-All functionality is covered by automated tests.
+This repository represents a complete, hardened delivery workflow comparable
+to what is used in professional engineering teams.
 
 ---
 
 ## Project Structure
 
-![CI/CD Pipeline](docs/images/Project-Structure.png)
+The repository is organized to clearly separate application code, CI/CD
+pipelines, infrastructure, runtime configuration, and documentation.
+
+![Project Structure](docs/images/Project-Structure.png)
 
 ---
 
- ## Docker‑First Approach
-
-All stages of the project run inside Docker containers:
-
-- Development
-- Testing
-- CI/CD execution
-- Security analysis
-- Infrastructure definition
-
-This guarantees consistent behavior across environments and eliminates
-local dependency issues. The same runtime is used locally and in CI.
+## Application Overview
 
 ---
 
-## CI/CD Pipeline
-
-The CI/CD pipeline automates the following stages:
-
-
-Build and Test
-
-- Docker image build
-- Automatic execution of unit and API tests
+The application itself is intentionally simple and deterministic, acting as
+a stable vehicle for CI/CD and architectural practices.
+It includes three Python components:
 
 
-Code Quality
-
-- Coverage generation using pytest‑cov
-- SonarQube analysis
-- Quality Gate enforcement
+1. **Dictionary**
+Stores and retrieves word definitions.
 
 
-Security (DevSecOps)
-
-- Bandit for Python static analysis
-- pip‑audit for dependency vulnerability scanning
+2. **Cost Calculator**
+Calculates total cost including tax, ignoring missing items.
 
 
-Infrastructure
+3. **Word Builder**
+Builds a word using indexed characters from a list of words.
 
-- Terraform configuration review (no real resources provisioned)
 
+All application behavior is covered by automated unit and API tests.
 
-Detailed pipeline documentation is available in the /docs directory.
+---
+
+## High‑Level Architecture
+
+---
+
+Developer → Pull Request → CI → Quality Gate → main → CD (approval) → EC2 → Docker → API
+
+The system is composed of four clearly separated layers:
+
+- CI orchestration (GitHub Actions)
+- Infrastructure provisioning (Terraform)
+- Runtime orchestration (Docker + Docker Compose)
+- Application execution (Python API)
+
+---
+
+## Docker Architecture (Runtime Layer)
+
+---
+
+Docker is not part of CI artifacts in this project — it is the production
+runtime.
+
+Key Principles
+
+- Docker runs only on the EC2 instance
+- GitHub Actions never runs the application
+- The EC2 host executes Docker locally
+- The application always runs inside a container
+
+How Docker Is Used
+
+- Dockerfile defines a reproducible runtime image
+- docker-compose.yml orchestrates the application
+- The same configuration is used locally and in production
+- Containers isolate the application from the host OS
+
+During Deployment
+
+On every production deployment:
+
+1. The EC2 instance pulls the latest code from main
+2. Docker Compose rebuilds the image using the Dockerfile
+3. The application container is restarted
+4. The API runs via uvicorn inside the container
+5. Docker continues running after the pipeline finishes
+
+Docker is the long‑lived execution layer of the system.
+
+---
+
+## CI/CD Pipeline Overview
 
 ---
 
@@ -104,61 +113,149 @@ Detailed pipeline documentation is available in the /docs directory.
 
 ---
 
-## Code Quality and Coverage
-
-- Tests are implemented using pytest
-- Coverage is generated using pytest‑cov
-- Coverage reports are imported into SonarQube
-- A Quality Gate enforces minimum quality and coverage thresholds
+## Continuous Integration (CI)
 
 ---
 
-## Code Coverage
+Triggered On
 
-Code coverage is generated during the CI pipeline using `pytest-cov` and
-published to SonarCloud for analysis.
+- Pull Requests
+- Pushes to main
 
-Coverage artifacts such as `coverage.xml` or `.coverage` are not committed
-to the repository.
+CI Responsibilities
 
-Local coverage execution (`make coverage`) is optional and intended only
-for quick developer feedback via console output.
+✅ Run unit and API tests
+✅ Run security scans (Bandit, pip‑audit)
+✅ Execute SonarCloud analysis
+✅ Enforce Quality Gates
+❌ No deployments
+❌ No infrastructure changes
+❌ No production secrets
+
+Quality Gates
+
+Pull Requests cannot be merged unless:
+
+- Tests pass
+- Security checks pass
+- SonarCloud Quality Gate passes
+
+This ensures quality enforcement is automatic and non‑optional.
 
 ---
 
-## Security
+## Continuous Deployment (CD)
 
-Security checks are integrated directly into the CI pipeline:
+---
 
-- Bandit performs static code analysis
-- pip‑audit checks dependencies for known vulnerabilities
+Triggered On
 
-The project demonstrates a shift‑left security approach without introducing
-runtime or platform‑level security complexity.
+- Push to main
+- All CI status checks passing
+- Manual approval via GitHub Environment
+
+CD Responsibilities
+
+- Apply Terraform configuration
+- Create or update the EC2 instance
+- Obtain the EC2 public IP dynamically
+- Connect to the instance via SSH
+- Deploy the application using Docker Compose
+- Execute a health check after deployment
+
+Production Protection
+
+- Deploy requires manual approval (environment: production)
+- Production secrets are environment‑scoped
+- No deployments occur without explicit authorization
 
 ---
 
 ## Infrastructure as Code (Terraform)
 
-Terraform is included to demonstrate Infrastructure as Code concepts.
+---
 
-The configuration is intentionally minimal and does not provision
-real cloud resources. Its purpose is to illustrate how infrastructure
-definitions can live alongside application and CI/CD code.
+Terraform manages:
 
-Further details are available in terraform/README.md.
+- EC2 instance
+- Security groups
+- Backend state (remote + locking)
+
+Key principles:
+
+- Infrastructure is declarative
+- State is remote and locked
+- Deployments are repeatable and idempotent
+- Infrastructure is independent from CI logic
+
+Terraform is executed only during CD, never in PRs.
+
+## Security (DevSecOps)
+
+---
+
+Security is enforced early in the lifecycle:
+
+- - Bandit: static analysis of Python code
+- - pip‑audit: dependency vulnerability scanning
+- - SonarCloud: quality, security, maintainability analysis
+
+Security findings in PRs block merges automatically.
+
+---
+
+## Code Coverage
+
+---
+
+- Coverage is generated during CI using pytest‑cov
+- Reports are consumed by SonarCloud
+- Coverage artifacts are not committed to the repository
+
+Coverage enforcement happens via Quality Gates, not manual review.
+
+---
+
+## Branch Protection & Governance
+
+---
+
+The main branch is fully protected:
+
+- No direct pushes
+- Pull Requests required
+- CI status checks required
+- SonarCloud Quality Gate required
+- Manual code review required
+- Force pushes disabled
+
+Production deployments are additionally gated via environments.
+
+---
+
+## Local Development
+
+---
+
+Common commands:
+
+make dev        # Run application locally using Docker
+make ci         # Run CI checks locally
+make coverage   # Local coverage summary (console only)
+
+The local environment mirrors production behavior via Docker.
 
 ---
 
 ## Work Management
 
-Project work is tracked using GitHub Projects to simulate a real team workflow.
-The board includes:
+---
+
+Project work is tracked using GitHub Projects, simulating a real team workflow:
+
 
 - Backlog
 - To Do
 - In Progress
 - Code Review
 - Done
-
-Issues represent tasks and real problems encountered during development.
