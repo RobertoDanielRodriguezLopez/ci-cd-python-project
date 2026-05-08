@@ -9,8 +9,7 @@ __pycache__/
 .idea/
 .vscode/
 
-# Tests and docs not needed in runtime image
-tests/
+# Docs not needed in runtime image
 docs/
 htmlcov/
 .pytest_cache/
