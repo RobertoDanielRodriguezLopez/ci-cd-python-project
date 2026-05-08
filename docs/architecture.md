@@ -20,8 +20,6 @@ in professional engineering teams.
 
 ## High‑Level Architecture
 
----
-
 Developer → Pull Request → CI → Quality Gate → main → CD (approval) → EC2 → Docker → API
 
 The architecture is composed of four explicit layers, each with a clearly
@@ -30,8 +28,6 @@ defined responsibility.
 ---
 
 ## Application Layer
-
----
 
 The application logic is intentionally simple and deterministic.
 Its purpose is to act as a stable base for demonstrating:
@@ -44,8 +40,6 @@ Its purpose is to act as a stable base for demonstrating:
 ---
 
 ## API Layer
-
----
 
 The API is implemented using FastAPI and exposes application functionality
 through a REST interface.
@@ -62,8 +56,6 @@ The API layer depends on the application layer, but not vice versa.
 ---
 
 ## Runtime Architecture (Docker)
-
----
 
 Docker is the production runtime of the system.
 
@@ -94,8 +86,6 @@ consistent behavior across environments.
 
 ## Deployment Architecture (EC2 + Docker)
 
----
-
 During a production deployment:
 
 1. Terraform ensures the EC2 infrastructure exists
@@ -110,8 +100,6 @@ Once deployed, the container continues running independently of the pipeline.
 ---
 
 ## CI/CD Separation of Concerns
-
----
 
 The architecture enforces a clear separation between CI and CD.
 
@@ -141,8 +129,6 @@ CD is protected by manual approvals and environment‑scoped secrets.
 
 ## Infrastructure Layer (Terraform)
 
----
-
 Infrastructure is provisioned using Terraform.
 
 Key architectural principles:
@@ -157,8 +143,6 @@ Terraform executions occur only during controlled deployment stages.
 ---
 
 ## Security and Governance
-
----
 
 Security is enforced across multiple layers of the architecture:
 
