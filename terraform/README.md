@@ -2,66 +2,80 @@
 
 ## Overview
 
-This directory contains Terraform configuration used to demonstrate
-Infrastructure as Code (IaC) concepts as part of a CI/CD-oriented project.
+This directory contains Terraform configuration used to provision and manage
+real cloud infrastructure.
 
-The purpose of this configuration is educational and architectural,
-not to provision real cloud infrastructure.
+Terraform is an active and essential component of the deployment workflow,
+responsible for creating and maintaining the infrastructure that hosts the
+application in production.
 
----
-
-## Purpose of Terraform in This Project
-
-Terraform is included to showcase:
-
-- Infrastructure as Code principles
-- Declarative infrastructure definitions
-- Version-controlled infrastructure configuration
-- Alignment with CI/CD and DevOps workflows
-
-The focus is on illustrating how infrastructure could be defined,
-reviewed, and managed alongside application code.
+Infrastructure changes are applied automatically during the Continuous
+Deployment (CD) stage, after all validation and approval requirements are met.
 
 ---
 
-## Scope and Limitations
-
-The Terraform configuration in this project:
-
-- Demonstrates IaC structure and syntax  
-- Shows how infrastructure definitions integrate with CI/CD concepts  
-- Lives alongside application and pipeline code  
-
-The configuration intentionally does **not**:
-
-- Provision real cloud resources  
-- Create production environments  
-- Manage networking, IAM, or secrets  
-- Interact with live cloud providers  
+## Managed Infrastructure
 
 ---
 
-## Design Decisions
+The Terraform configuration manages infrastructure components such as:
 
-Key design decisions include:
+- EC2 instances used as the application runtime
+- Security Groups controlling network access
+- Networking configuration required for application exposure
+- Remote backend and state locking for safe concurrent changes
 
-- Keeping Terraform configuration minimal and readable
-- Avoiding provider-specific complexity
-- Treating infrastructure as a conceptual layer
-- Preventing accidental resource creation or costs
+All infrastructure resources are version‑controlled and auditable.
 
 ---
 
-## Usage
+## Integration with CI/CD
 
-Terraform in this project is fully functional and applies real changes,
-but its scope is intentionally limited to local resources using the
-`local` provider.
+Terraform is executed as part of the Continuous Deployment (CD) pipeline
+implemented with GitHub Actions.
 
-The apply operation creates and replaces local files to demonstrate
-Infrastructure as Code behavior, state management, and environment
-promotion.
+### When Terraform Runs
 
-No cloud infrastructure is provisioned, and no external services are
-used. This approach allows demonstrating real Terraform workflows
-without introducing cost or operational risk.
+- Only on `main` branch changes
+- Only after all CI checks pass
+- Only after manual approval via GitHub Environments
+
+### Pipeline Responsibilities
+
+During deployment, Terraform:
+
+1. Initializes the configured backend
+2. Validates infrastructure definitions
+3. Applies infrastructure changes idempotently
+4. Produces outputs consumed by subsequent deployment steps
+
+---
+
+## State Management and Safety
+
+Terraform state is managed using a remote backend with locking enabled.
+
+This ensures:
+
+- Safe concurrent terraform operations
+- State consistency across pipeline runs
+- Prevention of accidental or conflicting changes
+
+---
+
+## Security Considerations
+
+- Terraform credentials are injected only during the CD job
+- Secrets are scoped to the production environment
+- Infrastructure changes require manual approval
+- No credentials are exposed to CI or Pull Requests
+
+## Usage Notes
+
+Terraform is not intended to be run manually during normal development.
+
+Expected usage is:
+
+- Automated execution via GitHub Actions
+- Controlled through branch protection and approvals
+- Reviewed through code changes in Pull Requests

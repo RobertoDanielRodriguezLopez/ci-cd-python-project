@@ -2,130 +2,185 @@
 
 ## Overview
 
-This project implements a CI/CD pipeline using **GitHub Actions**
-with a strong focus on automation, reproducibility, and quality assurance.
+This project implements a production‑ready CI/CD pipeline using
+GitHub Actions, designed to enforce quality, security, and controlled
+deployments.
 
-The pipeline is designed to validate the application on every change
-without requiring any manual steps, ensuring that code quality and
-security standards are consistently enforced.
+The pipeline follows a strict separation of responsibilities:
+
+- **Continuous Integration (CI)** validates every change
+- **Continuous Deployment (CD)** deploys only approved and validated code
 
 ---
 
 ## Pipeline Triggers
 
-The CI pipeline is executed automatically on:
+---
 
+### Continuous Integration (CI)
+
+CI is executed automatically on:
+
+- Every Pull Request
 - Every push to the `main` branch
-- Every pull request
 
-This ensures continuous validation of changes before and after merging.
-
----
-
-## Docker-First Approach
-
-All CI steps are executed inside Docker containers.
-
-Benefits of this approach:
-
-- Eliminates "it works on my machine" issues
-- Ensures identical runtime environments locally and in CI
-- Simplifies dependency management
-- Provides reproducible builds
-
-No system-level Python installation is required on the CI runner.
+This guarantees continuous validation before and after merges.
 
 ---
 
-## Pipeline Stages
-
-The CI pipeline is composed of the following stages:
-
-### 1. Code Checkout
-
-The repository is checked out with full Git history available.
-This allows tools like SonarQube to properly analyze code history
-and blame information.
+### Continuous Deployment (CD)
 
 ---
 
-### 2. Docker Image Build
+CD is executed only when:
 
-A Docker image is built using the project Dockerfile.
-This image is reused across subsequent steps to ensure consistency.
+- Code is pushed to `main`
+- All required CI checks pass
+- Manual approval is granted via GitHub Environments
 
----
-
-### 3. Test Execution
-
-Both unit tests and API tests are executed inside the Docker container.
-
-- Unit tests validate core business logic
-- API tests validate HTTP contracts and responses
-
-Tests are treated as a quality gate: failures stop the pipeline.
+No deployments occur from feature branches or Pull Requests.
 
 ---
 
-### 4. Coverage Generation
-
-Test execution also generates a coverage report.
-Coverage metrics are later consumed by SonarQube for quality analysis.
+## CI/CD Separation of Concerns
 
 ---
 
-### 5. Static Code Analysis (SonarQube)
+A strict separation exists between CI and CD.
 
-SonarQube is used to analyze:
+### Continuous Integration (CI)
 
-- Code quality
-- Code coverage
-- Maintainability
-- Reliability
-- Security hotspots
+CI focuses exclusively on verification, never on deployment.
 
-The project enforces a Quality Gate to prevent regressions in quality.
+CI responsibilities include:
+
+- Executing unit tests
+- Executing API tests
+- Running static security analysis
+- Scanning dependencies for vulnerabilities
+- Performing SonarCloud analysis
+- Enforcing Quality Gates
 
 ---
 
-### 6. Security Analysis
+### Continuous Deployment (CD)
 
-Security checks are integrated into the pipeline:
 
-- **Bandit** for static security analysis
-- **pip-audit** for dependency vulnerability scanning
+CD is responsible for production changes only.
 
-These checks provide early feedback on potential security risks.
+CD responsibilities include:
+
+- Applying Terraform infrastructure changes
+- Deploying the application to EC2
+- Managing the Docker runtime lifecycle
+- Verifying application health post‑deployment
+
+CD is protected by:
+- Manual approval
+- Environment‑scoped secrets
+- Branch protection rules
+
+---
+
+## Continuous Integration Pipeline
+
+---
+
+### CI Stages
+
+1. **Code Checkout**  
+   The repository is checked out with full history available to ensure
+   accurate analysis by quality tools.
+
+2. **Test Execution**  
+   - Unit tests validate core business logic
+   - API tests validate HTTP contracts and responses  
+   Test failures immediately stop the pipeline.
+
+3. **Security Analysis**  
+   - **Bandit** performs static analysis of Python code
+   - **pip‑audit** scans dependencies for known vulnerabilities
+
+4. **SonarCloud Analysis**  
+   SonarCloud analyzes:
+   - Code quality
+   - Coverage on new code
+   - Maintainability
+   - Reliability
+   - Security issues
+
+5. **Quality Gate Enforcement**  
+   A Quality Gate determines whether the change is acceptable.  
+   Failing the Quality Gate blocks Pull Request merges automatically.
 
 ---
 
 ## Quality Gates
 
-The pipeline is configured to fail if:
+---
 
-- Tests do not pass
-- Code quality degrades below defined thresholds
-- Critical security issues are detected
+A Pull Request cannot be merged unless:
 
-This ensures that only validated changes reach the main branch.
+- All tests pass
+- Security checks pass
+- SonarCloud Quality Gate passes
+
+---
+
+## Continuous Deployment Pipeline
+
+---
+
+### Deployment Flow
+
+When CD is triggered:
+
+1. Terraform validates and applies infrastructure changes
+2. The EC2 public IP is retrieved dynamically from Terraform outputs
+3. GitHub Actions connects to the EC2 instance via SSH
+4. The instance pulls the latest code from `main`
+5. Docker Compose rebuilds and restarts the application container
+6. A health check verifies successful deployment
+
+---
+
+### Production Protection
+
+---
+
+Production deployment is protected by:
+
+- GitHub Environments (`production`)
+- Manual approval before deployment
+- Secrets scoped exclusively to the production environment
+
+---
+
+## Docker in the Deployment Pipeline
+
+---
+
+Docker is the runtime environment, not a CI artifact.
+
+Key characteristics:
+
+- Docker runs only on the EC2 instance
+- GitHub Actions never runs application containers
+- Docker Compose orchestrates the application lifecycle
+- The same Docker configuration is used locally and in production
+
+After deployment, the application continues running independently of
+the pipeline.
 
 ---
 
 ## Failure Strategy
 
-The pipeline follows a fail-fast strategy:
-
-- Any failing stage stops the pipeline immediately
-- Clear logs are provided to identify the root cause
-- No partial or ambiguous states are allowed
-
 ---
 
-## Design Decisions
+The pipeline follows a fail‑fast strategy:
 
-Key decisions behind this pipeline:
-
-- Prefer clarity over overly complex orchestration
-- Use standard and widely adopted tools
-- Avoid environment-specific assumptions
-- Make failures explicit and visible
+- Any failing CI stage stops execution immediately
+- Clear logs identify the source of failure
+- No partial deployments are allowed
+- Production changes are applied only after full validation
