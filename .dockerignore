@@ -10,7 +10,6 @@ __pycache__/
 .vscode/
 
 # Tests and docs not needed in runtime image
-tests/
 docs/
 htmlcov/
 .pytest_cache/
