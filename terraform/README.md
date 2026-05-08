@@ -16,8 +16,6 @@ Deployment (CD) stage, after all validation and approval requirements are met.
 
 ## Managed Infrastructure
 
----
-
 The Terraform configuration manages infrastructure components such as:
 
 - EC2 instances used as the application runtime
@@ -36,7 +34,7 @@ implemented with GitHub Actions.
 
 ### When Terraform Runs
 
-- Only on `main` branch changes
+- Only on main branch changes
 - Only after all CI checks pass
 - Only after manual approval via GitHub Environments
 
@@ -69,6 +67,8 @@ This ensures:
 - Secrets are scoped to the production environment
 - Infrastructure changes require manual approval
 - No credentials are exposed to CI or Pull Requests
+
+---
 
 ## Usage Notes
 

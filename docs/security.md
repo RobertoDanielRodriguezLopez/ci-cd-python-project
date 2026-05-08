@@ -14,8 +14,6 @@ and consistently as part of the software delivery lifecycle.
 
 ## Security Scope
 
----
-
 The security model focuses on early‑stage application and pipeline security.
 
 Covered areas include:
@@ -34,8 +32,6 @@ Security checks are designed to be:
 ---
 
 ## Static Application Security Testing (SAST)
-
----
 
 ### Tool: Bandit
 
@@ -56,13 +52,11 @@ Bandit is executed automatically during Continuous Integration (CI).
 - Critical findings cause the CI pipeline to fail
 - Failed security checks block PR merges automatically
 
-This ensures insecure code never reaches the `main` branch.
+This ensures insecure code never reaches the main branch.
 
 ---
 
 ## Dependency Vulnerability Scanning
-
----
 
 ### Tool: pip‑audit
 
@@ -86,8 +80,6 @@ This provides early visibility into dependency‑level risks.
 
 ## SonarCloud Security Analysis
 
----
-
 Security analysis is complemented by **SonarCloud**, which evaluates:
 
 - Security hotspots
@@ -102,8 +94,6 @@ A failing Quality Gate blocks Pull Request merges automatically.
 
 ## CI Integration and Enforcement
 
----
-
 Security checks are deeply integrated into CI:
 
 - Executed automatically on every Pull Request
@@ -115,11 +105,9 @@ Security checks are deeply integrated into CI:
 
 ## Production Security Controls
 
----
-
 Production access is protected through pipeline governance:
 
-- No direct pushes to `main`
+- No direct pushes to main
 - Pull Requests and CI success required
 - Manual approval required for production deployments
 - Secrets scoped to the production environment

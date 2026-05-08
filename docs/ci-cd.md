@@ -15,14 +15,12 @@ The pipeline follows a strict separation of responsibilities:
 
 ## Pipeline Triggers
 
----
-
 ### Continuous Integration (CI)
 
 CI is executed automatically on:
 
 - Every Pull Request
-- Every push to the `main` branch
+- Every push to the main branch
 
 This guarantees continuous validation before and after merges.
 
@@ -30,11 +28,9 @@ This guarantees continuous validation before and after merges.
 
 ### Continuous Deployment (CD)
 
----
-
 CD is executed only when:
 
-- Code is pushed to `main`
+- Code is pushed to main
 - All required CI checks pass
 - Manual approval is granted via GitHub Environments
 
@@ -43,8 +39,6 @@ No deployments occur from feature branches or Pull Requests.
 ---
 
 ## CI/CD Separation of Concerns
-
----
 
 A strict separation exists between CI and CD.
 
@@ -84,8 +78,6 @@ CD is protected by:
 
 ## Continuous Integration Pipeline
 
----
-
 ### CI Stages
 
 1. **Code Checkout**  
@@ -102,7 +94,6 @@ CD is protected by:
    - **pip‑audit** scans dependencies for known vulnerabilities
 
 4. **SonarCloud Analysis**  
-   SonarCloud analyzes:
    - Code quality
    - Coverage on new code
    - Maintainability
@@ -117,8 +108,6 @@ CD is protected by:
 
 ## Quality Gates
 
----
-
 A Pull Request cannot be merged unless:
 
 - All tests pass
@@ -129,8 +118,6 @@ A Pull Request cannot be merged unless:
 
 ## Continuous Deployment Pipeline
 
----
-
 ### Deployment Flow
 
 When CD is triggered:
@@ -138,7 +125,7 @@ When CD is triggered:
 1. Terraform validates and applies infrastructure changes
 2. The EC2 public IP is retrieved dynamically from Terraform outputs
 3. GitHub Actions connects to the EC2 instance via SSH
-4. The instance pulls the latest code from `main`
+4. The instance pulls the latest code from main
 5. Docker Compose rebuilds and restarts the application container
 6. A health check verifies successful deployment
 
@@ -146,19 +133,15 @@ When CD is triggered:
 
 ### Production Protection
 
----
-
 Production deployment is protected by:
 
-- GitHub Environments (`production`)
+- GitHub Environments (production)
 - Manual approval before deployment
 - Secrets scoped exclusively to the production environment
 
 ---
 
 ## Docker in the Deployment Pipeline
-
----
 
 Docker is the runtime environment, not a CI artifact.
 
@@ -175,8 +158,6 @@ the pipeline.
 ---
 
 ## Failure Strategy
-
----
 
 The pipeline follows a fail‑fast strategy:
 

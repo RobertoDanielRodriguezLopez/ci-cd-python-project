@@ -32,8 +32,6 @@ pipelines, infrastructure, runtime configuration, and documentation.
 
 ## Application Overview
 
----
-
 The application itself is intentionally simple and deterministic, acting as
 a stable vehicle for CI/CD and architectural practices.
 It includes three Python components:
@@ -57,8 +55,6 @@ All application behavior is covered by automated unit and API tests.
 
 ## High‑Level Architecture
 
----
-
 Developer → Pull Request → CI → Quality Gate → main → CD (approval) → EC2 → Docker → API
 
 The system is composed of four clearly separated layers:
@@ -71,8 +67,6 @@ The system is composed of four clearly separated layers:
 ---
 
 ## Docker Architecture (Runtime Layer)
-
----
 
 Docker is not part of CI artifacts in this project — it is the production
 runtime.
@@ -107,15 +101,11 @@ Docker is the long‑lived execution layer of the system.
 
 ## CI/CD Pipeline Overview
 
----
-
 ![CI/CD Pipeline](docs/images/CI-CD-pipeline.png)
 
 ---
 
 ## Continuous Integration (CI)
-
----
 
 Triggered On
 
@@ -124,13 +114,13 @@ Triggered On
 
 CI Responsibilities
 
-✅ Run unit and API tests
-✅ Run security scans (Bandit, pip‑audit)
-✅ Execute SonarCloud analysis
-✅ Enforce Quality Gates
-❌ No deployments
-❌ No infrastructure changes
-❌ No production secrets
+- ✅ Run unit and API tests
+- ✅ Run security scans (Bandit, pip‑audit)
+- ✅ Execute SonarCloud analysis
+- ✅ Enforce Quality Gates
+- ❌ No deployments
+- ❌ No infrastructure changes
+- ❌ No production secrets
 
 Quality Gates
 
@@ -145,8 +135,6 @@ This ensures quality enforcement is automatic and non‑optional.
 ---
 
 ## Continuous Deployment (CD)
-
----
 
 Triggered On
 
@@ -173,8 +161,6 @@ Production Protection
 
 ## Infrastructure as Code (Terraform)
 
----
-
 Terraform manages:
 
 - EC2 instance
@@ -190,23 +176,21 @@ Key principles:
 
 Terraform is executed only during CD, never in PRs.
 
-## Security (DevSecOps)
-
 ---
+
+## Security (DevSecOps)
 
 Security is enforced early in the lifecycle:
 
-- - Bandit: static analysis of Python code
-- - pip‑audit: dependency vulnerability scanning
-- - SonarCloud: quality, security, maintainability analysis
+- Bandit: static analysis of Python code
+- pip‑audit: dependency vulnerability scanning
+- SonarCloud: quality, security, maintainability analysis
 
 Security findings in PRs block merges automatically.
 
 ---
 
 ## Code Coverage
-
----
 
 - Coverage is generated during CI using pytest‑cov
 - Reports are consumed by SonarCloud
@@ -217,8 +201,6 @@ Coverage enforcement happens via Quality Gates, not manual review.
 ---
 
 ## Branch Protection & Governance
-
----
 
 The main branch is fully protected:
 
@@ -235,8 +217,6 @@ Production deployments are additionally gated via environments.
 
 ## Local Development
 
----
-
 Common commands:
 
 make dev        # Run application locally using Docker
@@ -248,8 +228,6 @@ The local environment mirrors production behavior via Docker.
 ---
 
 ## Work Management
-
----
 
 Project work is tracked using GitHub Projects, simulating a real team workflow:
 

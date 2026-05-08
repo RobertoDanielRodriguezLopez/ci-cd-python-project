@@ -8,7 +8,7 @@ repeatable way.
 
 Testing exists to support quality enforcement, not as an isolated activity.
 All tests are integrated into the Continuous Integration (CI) pipeline and
-are mandatory for merging changes into `main`.
+are mandatory for merging changes into main.
 
 ---
 
@@ -62,7 +62,7 @@ These tests ensure:
 - HTTP status codes are accurate
 - Application behavior matches external expectations
 
-API tests are implemented using FastAPI’s `TestClient`, avoiding
+API tests are implemented using FastAPI’s TestClient, avoiding
 external services or network dependencies.
 
 ---
@@ -87,7 +87,7 @@ All tests are executed automatically as part of Continuous Integration (CI).
 CI behavior:
 
 - Tests run on every Pull Request
-- Tests run on every push to `main`
+- Tests run on every push to main
 - Test failures immediately stop the pipeline
 - Failed tests block merges automatically
 
