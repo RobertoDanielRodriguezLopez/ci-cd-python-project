@@ -219,9 +219,9 @@ Production deployments are additionally gated via environments.
 
 Common commands:
 
-make dev        # Run application locally using Docker
-make ci         # Run CI checks locally
-make coverage   # Local coverage summary (console only)
+- make dev        # Run application locally using Docker
+- make ci         # Run CI checks locally
+- make coverage   # Local coverage summary (console only)
 
 The local environment mirrors production behavior via Docker.
 

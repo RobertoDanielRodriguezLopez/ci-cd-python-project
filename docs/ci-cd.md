@@ -90,8 +90,8 @@ CD is protected by:
    Test failures immediately stop the pipeline.
 
 3. **Security Analysis**  
-   - **Bandit** performs static analysis of Python code
-   - **pip‑audit** scans dependencies for known vulnerabilities
+   - Bandit performs static analysis of Python code
+   - pip‑audit scans dependencies for known vulnerabilities
 
 4. **SonarCloud Analysis**  
    - Code quality
